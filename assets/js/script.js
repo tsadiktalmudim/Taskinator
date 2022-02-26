@@ -110,7 +110,7 @@ var taskButtonHandler = function(event) {
     var targetE1 = event.target;
 
     // edit button is clicked
-    if (targetE1.matches(".edit.btn")) {
+    if (targetE1.matches(".edit-btn")) {
         var taskId = targetE1.getAttribute("data-task-id");
         editTask(taskId);
     }
@@ -129,7 +129,6 @@ var completeEditTask = function(taskName, taskType, taskId) {
     //assign values
     taskSelected.querySelector("h3.task-name").textContent = taskName;
     taskSelected.querySelector("span.task-type").textContent = taskType;
-    alert("Task updated!")
 
     // loop through tasks array and task object with new content
     for (var i = 0; i < tasks.length; i++) {
@@ -137,12 +136,13 @@ var completeEditTask = function(taskName, taskType, taskId) {
             tasks[i].name = taskName;
             tasks[i].type = taskType;
         }
-    };
+    }
+    alert("Task updated!");
 
-    // reset button textback to normal
+    // reset button text back to normal
     formE1.removeAttribute("data-task-id");
-    document.querySelector("#save-task").textContent = "Add Task";
-    saveTasks;
+    formE1.querySelector("#save-task").textContent = "Add Task";
+    saveTasks();
 };
 
 var editTask = function(taskId) {
