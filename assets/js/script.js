@@ -60,6 +60,7 @@ var createTaskE1 = function(taskDataObj) {
 
     //increase task counter for next unique id
     taskIdCounter++;
+    saveTasks();
 };
 
 var createTaskActions = function(taskId) {
@@ -141,6 +142,7 @@ var completeEditTask = function(taskName, taskType, taskId) {
     // reset button textback to normal
     formE1.removeAttribute("data-task-id");
     document.querySelector("#save-task").textContent = "Add Task";
+    saveTasks;
 };
 
 var editTask = function(taskId) {
@@ -162,7 +164,6 @@ var editTask = function(taskId) {
     formE1.setAttribute("data-task-id", taskId);
     // update button to reflect editing rather than adding a new task
     formE1.querySelector("#save-task").textContent = "Save Task";
-
 };
 
 
@@ -182,6 +183,7 @@ var deleteTask = function(taskId) {
     }
     // reassign tasks array to be the same as updatedTaskArr
     tasks = updatedTaskArr;
+    saveTasks();
 };
 
 var taskStatusChangeHandler = function(event) {
@@ -204,11 +206,33 @@ var taskStatusChangeHandler = function(event) {
         if (tasks[i].id === parseInt(taskId)) {
             tasks[i].status = statusValue;
         }
+    };
+    saveTasks();
+}
+
+var saveTasks = function() {
+    // save tasks to localStorage so that reload/refresh does not affect tasks
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+var loadTasks = function() {
+    var savedTasks = localStorage.getItem("tasks");
+    if (savedTasks === null) {
+        return false;
     }
-};
+    console.log("Saved tasks found");
+    // turn it back into an array of objects
+    savedTasks = JSON.parse(savedTasks);
+    // loop through array
+    for (var i = 0; i < savedTasks.length; i++) {
+        createTaskE1(savedTasks[i]);
+    }
+}
+
 // create new task
 formE1.addEventListener("submit", taskFormHandler);
 // edit and delete tasks
 pageContentE1.addEventListener("click", taskButtonHandler);
 // change task status
 pageContentE1.addEventListener("change", taskStatusChangeHandler);
+loadTasks();
